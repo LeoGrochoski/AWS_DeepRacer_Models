@@ -1,0 +1,979 @@
+Writing training job pid to /opt/ml/training_worker.pid: 47
+Training Worker Args: Namespace(aws_region='us-east-1', checkpoint_dir='./checkpoint_sagemaker', environment_s3_key=None, framework='tensorflow', model_metadata_s3_key='s3://aws-deepracer-data-us-east-1-1/data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/model_metadata.json', preset_s3_key=None, pretrained_checkpoint_dir='./pretrained_checkpoint_sagemaker', pretrained_s3_bucket=None, pretrained_s3_prefix='sagemaker', s3_bucket='aws-deepracer-data-us-east-1-1', s3_prefix='data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/')
+[s3] Successfully downloaded model metadata                  from s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/model_metadata.json to local ./custom_files/agent/model_metadata.json.
+Sensor list ['FRONT_FACING_CAMERA'], network DEEP_CONVOLUTIONAL_NETWORK_SHALLOW, simapp_version 5.0, training_algorithm sac, action_space_type continuous lidar_config {'num_sectors': 8, 'num_values_per_sector': 8, 'clipping_dist': 2.0}
+Action space from file: {'steering_angle': {'high': 30.0, 'low': -30.0}, 'speed': {'high': 1.0, 'low': 0.5}}
+Using the following hyper-parameters
+{
+  "batch_size": 64,
+  "discount_factor": 0.99,
+  "e_greedy_value": 0.05,
+  "epsilon_steps": 10000,
+  "exploration_type": "additive_noise",
+  "loss_type": "mean squared error",
+  "lr": 0.0003,
+  "num_episodes_between_training": 1,
+  "sac_alpha": 0.2,
+  "stack_size": 1,
+  "term_cond_avg_score": 100000.0,
+  "term_cond_max_episodes": 100000
+}
+[s3] Successfully uploaded hyperparameters to                  s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/ip/hyperparameters.json.
+Hostname: ip-10-0-107-223.ec2.internal
+[s3] Successfully uploaded ip address to                  s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/ip/ip.json.
+[s3] Successfully uploaded ip done to                  s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/ip/done.
+## Creating graph - name: MultiAgentGraphManager
+## Start physics before creating graph
+## Create graph
+## Creating agent - name: agent
+[RL] Created agent loggers
+[RL] Dynamic import of memory:  "ExperienceReplayParameters" {
+    "allow_duplicates_in_batch_sampling": true,
+    "load_memory_from_file_path": null,
+    "max_size": [
+        "<MemoryGranularity.Transitions: 0>",
+        1000000
+    ],
+    "shared_memory": false
+}
+[RL] Dynamically imported of memory <rl_coach.memories.non_episodic.experience_replay.ExperienceReplay object at 0x7f6f0d698e20>
+[RL] Setting devices
+[RL] Setting filters
+[RL] Setting filter devices: numpy
+[RL] Setting Phase
+[RL] After setting Phase
+[RL] Setting signals
+[RL] Agent init successful
+## Created agent: agent
+/root/anaconda/envs/sagemaker_env/lib/python3.8/site-packages/rl_coach/architectures/tensorflow_components/layers.py:119: UserWarning: `tf.layers.conv2d` is deprecated and will be removed in a future version. Please Use `tf.keras.layers.Conv2D` instead.
+  return tf.compat.v1.layers.conv2d(input_layer, filters=self.num_filters, kernel_size=self.kernel_size,
+/root/anaconda/envs/sagemaker_env/lib/python3.8/site-packages/rl_coach/architectures/tensorflow_components/layers.py:181: UserWarning: `tf.layers.dense` is deprecated and will be removed in a future version. Please use `tf.keras.layers.Dense` instead.
+  return tf.compat.v1.layers.dense(input_layer, self.units, name=name, kernel_initializer=kernel_initializer,
+/root/anaconda/envs/sagemaker_env/lib/python3.8/site-packages/rl_coach/architectures/tensorflow_components/layers.py:181: UserWarning: `tf.layers.dense` is deprecated and will be removed in a future version. Please use `tf.keras.layers.Dense` instead.
+  return tf.compat.v1.layers.dense(input_layer, self.units, name=name, kernel_initializer=kernel_initializer,
+Network: policy, Copies: 1 (online network)
+-------------------------------------------
+Input Embedder: FRONT_FACING_CAMERA
+	Input size = [120, 160, 1]
+	Input Normalization (scale = 255.0, offset = 0.0)
+	Convolution (num filters = 32, kernel size = 8, stride = 4)
+	Activation (type = <function relu at 0x7f6f15805310>)
+	Convolution (num filters = 64, kernel size = 4, stride = 2)
+	Activation (type = <function relu at 0x7f6f15805310>)
+	Convolution (num filters = 64, kernel size = 3, stride = 1)
+	Activation (type = <function relu at 0x7f6f15805310>)
+Middleware:
+	Dense (num outputs = 512)
+	Activation (type = <function relu at 0x7f6f15805310>)
+Output Head: sac_policy_head
+	policy head:		Dense (num outputs = 256)
+			Dense (num outputs = 256)
+			Dense (num outputs = [4])
+	policy_mu = output[:num_actions], policy_std = output[num_actions:]
+/root/anaconda/envs/sagemaker_env/lib/python3.8/site-packages/rl_coach/architectures/tensorflow_components/layers.py:119: UserWarning: `tf.layers.conv2d` is deprecated and will be removed in a future version. Please Use `tf.keras.layers.Conv2D` instead.
+  return tf.compat.v1.layers.conv2d(input_layer, filters=self.num_filters, kernel_size=self.kernel_size,
+Network: q, Copies: 1 (online network)
+--------------------------------------
+Input Embedder: FRONT_FACING_CAMERA
+	Input size = [120, 160, 1]
+	Input Normalization (scale = 255.0, offset = 0.0)
+	Convolution (num filters = 32, kernel size = 8, stride = 4)
+	Activation (type = <function relu at 0x7f6f15805310>)
+	Convolution (num filters = 64, kernel size = 4, stride = 2)
+	Activation (type = <function relu at 0x7f6f15805310>)
+	Convolution (num filters = 64, kernel size = 3, stride = 1)
+	Activation (type = <function relu at 0x7f6f15805310>)
+Middleware:
+	No layers
+Output Head: q_values_head
+	q1 output		Dense (num outputs = 256)
+			Dense (num outputs = 256)
+			Dense (num outputs = 1)
+	q2 output		Dense (num outputs = 256)
+			Dense (num outputs = 256)
+			Dense (num outputs = 1)
+	min(Q1,Q2)
+Network: v, Copies: 2 (online network | target network)
+-------------------------------------------------------
+Input Embedder: FRONT_FACING_CAMERA
+	Input size = [120, 160, 1]
+	Input Normalization (scale = 255.0, offset = 0.0)
+	Convolution (num filters = 32, kernel size = 8, stride = 4)
+	Activation (type = <function relu at 0x7f6f15805310>)
+	Convolution (num filters = 64, kernel size = 4, stride = 2)
+	Activation (type = <function relu at 0x7f6f15805310>)
+	Convolution (num filters = 64, kernel size = 3, stride = 1)
+	Activation (type = <function relu at 0x7f6f15805310>)
+Middleware:
+	Dense (num outputs = 512)
+	Activation (type = <function relu at 0x7f6f15805310>)
+Output Head: v_values_head
+	Dense (num outputs = 1)
+## Stop physics after creating graph
+## Creating session
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/0_Step-0.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 0
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+Unable to find deepracer checkpoint json
+Unable to find the best deepracer checkpoint number. Getting the last checkpoint number
+Unable to find deepracer checkpoint json
+Unable to find the last deepracer checkpoint number.
+Unable to find deepracer checkpoint json
+Unable to find the last deepracer checkpoint number.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_0.pb
+Best checkpoint number: -1, Last checkpoint number: -1
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+Unable to find deepracer checkpoint json
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+[s3] Successfully uploaded .ready to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.ready.
+DoorMan: installing SIGINT, SIGTERM
+Training> Name=main_level/agent, Worker=0, Episode=1, Total reward=0, Steps=52, Training iteration=0
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/1_Step-52.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 1
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_1.pb
+Best checkpoint number: 0, Last checkpoint number: 0
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Training> Name=main_level/agent, Worker=0, Episode=2, Total reward=0, Steps=129, Training iteration=52
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/2_Step-129.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 2
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_2.pb
+Best checkpoint number: 0, Last checkpoint number: 0
+Copying the frozen checkpoint from ./frozen_models/agent/model_0.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Training> Name=main_level/agent, Worker=0, Episode=3, Total reward=0, Steps=153, Training iteration=129
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/3_Step-153.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 3
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_3.pb
+Best checkpoint number: 1, Last checkpoint number: 1
+Copying the frozen checkpoint from ./frozen_models/agent/model_1.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Training> Name=main_level/agent, Worker=0, Episode=4, Total reward=0, Steps=187, Training iteration=153
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/4_Step-187.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 4
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_4.pb
+Best checkpoint number: 2, Last checkpoint number: 2
+Copying the frozen checkpoint from ./frozen_models/agent/model_2.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'0'}
+Training> Name=main_level/agent, Worker=0, Episode=5, Total reward=0, Steps=238, Training iteration=187
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/5_Step-238.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 5
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_5.pb
+Best checkpoint number: 2, Last checkpoint number: 3
+Copying the frozen checkpoint from ./frozen_models/agent/model_2.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'1'}
+Training> Name=main_level/agent, Worker=0, Episode=6, Total reward=0, Steps=263, Training iteration=238
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/6_Step-263.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 6
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_6.pb
+Best checkpoint number: 2, Last checkpoint number: 4
+Copying the frozen checkpoint from ./frozen_models/agent/model_2.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'3'}
+Training> Name=main_level/agent, Worker=0, Episode=7, Total reward=0, Steps=284, Training iteration=263
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/7_Step-284.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 7
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_7.pb
+Best checkpoint number: 2, Last checkpoint number: 5
+Copying the frozen checkpoint from ./frozen_models/agent/model_2.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'4'}
+Training> Name=main_level/agent, Worker=0, Episode=8, Total reward=0, Steps=357, Training iteration=284
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/8_Step-357.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 8
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_8.pb
+Best checkpoint number: 2, Last checkpoint number: 6
+Copying the frozen checkpoint from ./frozen_models/agent/model_2.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'5'}
+Training> Name=main_level/agent, Worker=0, Episode=9, Total reward=0, Steps=390, Training iteration=357
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/9_Step-390.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 9
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_9.pb
+Best checkpoint number: 7, Last checkpoint number: 7
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'6'}
+Training> Name=main_level/agent, Worker=0, Episode=10, Total reward=0, Steps=484, Training iteration=390
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/10_Step-484.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 10
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_10.pb
+Best checkpoint number: 7, Last checkpoint number: 8
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'2'}
+Training> Name=main_level/agent, Worker=0, Episode=11, Total reward=0, Steps=510, Training iteration=484
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/11_Step-510.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 11
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_11.pb
+Best checkpoint number: 7, Last checkpoint number: 9
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'8'}
+Training> Name=main_level/agent, Worker=0, Episode=12, Total reward=0, Steps=540, Training iteration=510
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/12_Step-540.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 12
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_12.pb
+Best checkpoint number: 7, Last checkpoint number: 10
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'9'}
+Training> Name=main_level/agent, Worker=0, Episode=13, Total reward=0, Steps=562, Training iteration=540
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/13_Step-562.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 13
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_13.pb
+Best checkpoint number: 7, Last checkpoint number: 11
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'10'}
+Training> Name=main_level/agent, Worker=0, Episode=14, Total reward=0, Steps=585, Training iteration=562
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/14_Step-585.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 14
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_14.pb
+Best checkpoint number: 7, Last checkpoint number: 12
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'11'}
+Training> Name=main_level/agent, Worker=0, Episode=15, Total reward=0, Steps=606, Training iteration=585
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/15_Step-606.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 15
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_15.pb
+Best checkpoint number: 7, Last checkpoint number: 13
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'12'}
+Training> Name=main_level/agent, Worker=0, Episode=16, Total reward=0, Steps=630, Training iteration=606
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/16_Step-630.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 16
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_16.pb
+Best checkpoint number: 7, Last checkpoint number: 14
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'13'}
+Training> Name=main_level/agent, Worker=0, Episode=17, Total reward=0, Steps=647, Training iteration=630
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/17_Step-647.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 17
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_17.pb
+Best checkpoint number: 7, Last checkpoint number: 15
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'14'}
+Training> Name=main_level/agent, Worker=0, Episode=18, Total reward=0, Steps=667, Training iteration=647
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/18_Step-667.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 18
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_18.pb
+Best checkpoint number: 7, Last checkpoint number: 16
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'15'}
+Training> Name=main_level/agent, Worker=0, Episode=19, Total reward=0, Steps=697, Training iteration=667
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/19_Step-697.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 19
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_19.pb
+Best checkpoint number: 7, Last checkpoint number: 17
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'16'}
+Training> Name=main_level/agent, Worker=0, Episode=20, Total reward=0, Steps=739, Training iteration=697
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/20_Step-739.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 20
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_20.pb
+Best checkpoint number: 7, Last checkpoint number: 18
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'17'}
+Training> Name=main_level/agent, Worker=0, Episode=21, Total reward=0, Steps=786, Training iteration=739
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/21_Step-786.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 21
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_21.pb
+Best checkpoint number: 7, Last checkpoint number: 19
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'18'}
+Training> Name=main_level/agent, Worker=0, Episode=22, Total reward=0, Steps=849, Training iteration=786
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/22_Step-849.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 22
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_22.pb
+Best checkpoint number: 7, Last checkpoint number: 20
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'19'}
+Training> Name=main_level/agent, Worker=0, Episode=23, Total reward=0, Steps=884, Training iteration=849
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/23_Step-884.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 23
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_23.pb
+Best checkpoint number: 7, Last checkpoint number: 21
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'20'}
+Training> Name=main_level/agent, Worker=0, Episode=24, Total reward=0, Steps=907, Training iteration=884
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/24_Step-907.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 24
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_24.pb
+Best checkpoint number: 7, Last checkpoint number: 22
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'21'}
+Training> Name=main_level/agent, Worker=0, Episode=25, Total reward=0, Steps=932, Training iteration=907
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/25_Step-932.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 25
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_25.pb
+Best checkpoint number: 7, Last checkpoint number: 23
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'22'}
+Training> Name=main_level/agent, Worker=0, Episode=26, Total reward=0, Steps=956, Training iteration=932
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/26_Step-956.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 26
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_26.pb
+Best checkpoint number: 7, Last checkpoint number: 24
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'23'}
+Training> Name=main_level/agent, Worker=0, Episode=27, Total reward=0, Steps=978, Training iteration=956
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/27_Step-978.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 27
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_27.pb
+Best checkpoint number: 7, Last checkpoint number: 25
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'24'}
+Training> Name=main_level/agent, Worker=0, Episode=28, Total reward=0, Steps=1018, Training iteration=978
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/28_Step-1018.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 28
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_28.pb
+Best checkpoint number: 7, Last checkpoint number: 26
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'25'}
+Training> Name=main_level/agent, Worker=0, Episode=29, Total reward=0, Steps=1041, Training iteration=1018
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/29_Step-1041.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 29
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_29.pb
+Best checkpoint number: 7, Last checkpoint number: 27
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'26'}
+Training> Name=main_level/agent, Worker=0, Episode=30, Total reward=0, Steps=1064, Training iteration=1041
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/30_Step-1064.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 30
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_30.pb
+Best checkpoint number: 7, Last checkpoint number: 28
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'27'}
+Training> Name=main_level/agent, Worker=0, Episode=31, Total reward=0, Steps=1085, Training iteration=1064
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/31_Step-1085.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 31
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_31.pb
+Best checkpoint number: 7, Last checkpoint number: 29
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'28'}
+Training> Name=main_level/agent, Worker=0, Episode=32, Total reward=0, Steps=1110, Training iteration=1085
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/32_Step-1110.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 32
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_32.pb
+Best checkpoint number: 7, Last checkpoint number: 30
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'29'}
+Training> Name=main_level/agent, Worker=0, Episode=33, Total reward=0, Steps=1130, Training iteration=1110
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/33_Step-1130.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 33
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_33.pb
+Best checkpoint number: 7, Last checkpoint number: 31
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'30'}
+Training> Name=main_level/agent, Worker=0, Episode=34, Total reward=0, Steps=1149, Training iteration=1130
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/34_Step-1149.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 34
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_34.pb
+Best checkpoint number: 7, Last checkpoint number: 32
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'31'}
+Training> Name=main_level/agent, Worker=0, Episode=35, Total reward=0, Steps=1193, Training iteration=1149
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/35_Step-1193.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 35
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_35.pb
+Best checkpoint number: 7, Last checkpoint number: 33
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'32'}
+Training> Name=main_level/agent, Worker=0, Episode=36, Total reward=0, Steps=1216, Training iteration=1193
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/36_Step-1216.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 36
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_36.pb
+Best checkpoint number: 7, Last checkpoint number: 34
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'33'}
+Training> Name=main_level/agent, Worker=0, Episode=37, Total reward=0, Steps=1234, Training iteration=1216
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/37_Step-1234.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 37
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_37.pb
+Best checkpoint number: 7, Last checkpoint number: 35
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'34'}
+Training> Name=main_level/agent, Worker=0, Episode=38, Total reward=0, Steps=1352, Training iteration=1234
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/38_Step-1352.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 38
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_38.pb
+Best checkpoint number: 7, Last checkpoint number: 36
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'35'}
+Training> Name=main_level/agent, Worker=0, Episode=39, Total reward=0, Steps=1376, Training iteration=1352
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/39_Step-1376.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 39
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_39.pb
+Best checkpoint number: 7, Last checkpoint number: 37
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'36'}
+Training> Name=main_level/agent, Worker=0, Episode=40, Total reward=0, Steps=1446, Training iteration=1376
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/40_Step-1446.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 40
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_40.pb
+Best checkpoint number: 7, Last checkpoint number: 38
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'37'}
+Training> Name=main_level/agent, Worker=0, Episode=41, Total reward=0, Steps=1464, Training iteration=1446
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/41_Step-1464.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 41
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_41.pb
+Best checkpoint number: 7, Last checkpoint number: 39
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'38'}
+Training> Name=main_level/agent, Worker=0, Episode=42, Total reward=0, Steps=1490, Training iteration=1464
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/42_Step-1490.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 42
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_42.pb
+Best checkpoint number: 7, Last checkpoint number: 40
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'39'}
+Training> Name=main_level/agent, Worker=0, Episode=43, Total reward=0, Steps=1515, Training iteration=1490
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/43_Step-1515.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 43
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_43.pb
+Best checkpoint number: 7, Last checkpoint number: 41
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'40'}
+Training> Name=main_level/agent, Worker=0, Episode=44, Total reward=0, Steps=1568, Training iteration=1515
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/44_Step-1568.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 44
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_44.pb
+Best checkpoint number: 7, Last checkpoint number: 42
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'41'}
+Training> Name=main_level/agent, Worker=0, Episode=45, Total reward=0, Steps=1593, Training iteration=1568
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/45_Step-1593.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 45
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_45.pb
+Best checkpoint number: 7, Last checkpoint number: 43
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'42'}
+Training> Name=main_level/agent, Worker=0, Episode=46, Total reward=0, Steps=1612, Training iteration=1593
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/46_Step-1612.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 46
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_46.pb
+Best checkpoint number: 7, Last checkpoint number: 44
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'43'}
+Training> Name=main_level/agent, Worker=0, Episode=47, Total reward=0, Steps=1701, Training iteration=1612
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/47_Step-1701.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 47
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_47.pb
+Best checkpoint number: 7, Last checkpoint number: 45
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'44'}
+Training> Name=main_level/agent, Worker=0, Episode=48, Total reward=0, Steps=1722, Training iteration=1701
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/48_Step-1722.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 48
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_48.pb
+Best checkpoint number: 7, Last checkpoint number: 46
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'45'}
+Training> Name=main_level/agent, Worker=0, Episode=49, Total reward=0, Steps=1763, Training iteration=1722
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/49_Step-1763.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 49
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_49.pb
+Best checkpoint number: 7, Last checkpoint number: 47
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'46'}
+Training> Name=main_level/agent, Worker=0, Episode=50, Total reward=0, Steps=1783, Training iteration=1763
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/50_Step-1783.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 50
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_50.pb
+Best checkpoint number: 7, Last checkpoint number: 48
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'47'}
+Training> Name=main_level/agent, Worker=0, Episode=51, Total reward=0, Steps=1824, Training iteration=1783
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/51_Step-1824.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 51
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_51.pb
+Best checkpoint number: 7, Last checkpoint number: 49
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'48'}
+Training> Name=main_level/agent, Worker=0, Episode=52, Total reward=0, Steps=1842, Training iteration=1824
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/52_Step-1842.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 52
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_52.pb
+Best checkpoint number: 7, Last checkpoint number: 50
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'49'}
+Training> Name=main_level/agent, Worker=0, Episode=53, Total reward=0, Steps=1862, Training iteration=1842
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/53_Step-1862.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 53
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_53.pb
+Best checkpoint number: 7, Last checkpoint number: 51
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'50'}
+Training> Name=main_level/agent, Worker=0, Episode=54, Total reward=0, Steps=1905, Training iteration=1862
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/54_Step-1905.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 54
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_54.pb
+Best checkpoint number: 7, Last checkpoint number: 52
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'51'}
+Training> Name=main_level/agent, Worker=0, Episode=55, Total reward=0, Steps=1928, Training iteration=1905
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/55_Step-1928.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 55
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_55.pb
+Best checkpoint number: 7, Last checkpoint number: 53
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'52'}
+Training> Name=main_level/agent, Worker=0, Episode=56, Total reward=0, Steps=1953, Training iteration=1928
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/56_Step-1953.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 56
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_56.pb
+Best checkpoint number: 7, Last checkpoint number: 54
+Copying the frozen checkpoint from ./frozen_models/agent/model_7.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'53'}
+Training> Name=main_level/agent, Worker=0, Episode=57, Total reward=0, Steps=1987, Training iteration=1953
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/57_Step-1987.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 57
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_57.pb
+Best checkpoint number: 55, Last checkpoint number: 55
+Copying the frozen checkpoint from ./frozen_models/agent/model_55.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'54'}
+Training> Name=main_level/agent, Worker=0, Episode=58, Total reward=0, Steps=2076, Training iteration=1987
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/58_Step-2076.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 58
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_58.pb
+Best checkpoint number: 56, Last checkpoint number: 56
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'55'}
+Training> Name=main_level/agent, Worker=0, Episode=59, Total reward=0, Steps=2186, Training iteration=2076
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/59_Step-2186.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 59
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_59.pb
+Best checkpoint number: 56, Last checkpoint number: 57
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'7'}
+Training> Name=main_level/agent, Worker=0, Episode=60, Total reward=0, Steps=2301, Training iteration=2186
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/60_Step-2301.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 60
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_60.pb
+Best checkpoint number: 56, Last checkpoint number: 58
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'57'}
+Training> Name=main_level/agent, Worker=0, Episode=61, Total reward=0, Steps=2361, Training iteration=2301
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/61_Step-2361.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 61
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_61.pb
+Best checkpoint number: 56, Last checkpoint number: 59
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'58'}
+Training> Name=main_level/agent, Worker=0, Episode=62, Total reward=0, Steps=2404, Training iteration=2361
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/62_Step-2404.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 62
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_62.pb
+Best checkpoint number: 56, Last checkpoint number: 60
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'59'}
+Training> Name=main_level/agent, Worker=0, Episode=63, Total reward=0, Steps=2434, Training iteration=2404
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/63_Step-2434.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 63
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_63.pb
+Best checkpoint number: 56, Last checkpoint number: 61
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'60'}
+Training> Name=main_level/agent, Worker=0, Episode=64, Total reward=0, Steps=2485, Training iteration=2434
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/64_Step-2485.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 64
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_64.pb
+Best checkpoint number: 56, Last checkpoint number: 62
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'61'}
+Training> Name=main_level/agent, Worker=0, Episode=65, Total reward=0, Steps=2506, Training iteration=2485
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/65_Step-2506.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 65
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_65.pb
+Best checkpoint number: 56, Last checkpoint number: 63
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'62'}
+Training> Name=main_level/agent, Worker=0, Episode=66, Total reward=0, Steps=2601, Training iteration=2506
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/66_Step-2601.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 66
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_66.pb
+Best checkpoint number: 56, Last checkpoint number: 64
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'63'}
+Training> Name=main_level/agent, Worker=0, Episode=67, Total reward=0, Steps=2692, Training iteration=2601
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/67_Step-2692.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 67
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_67.pb
+Best checkpoint number: 56, Last checkpoint number: 65
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'64'}
+Training> Name=main_level/agent, Worker=0, Episode=68, Total reward=0, Steps=2756, Training iteration=2692
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/68_Step-2756.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 68
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_68.pb
+Best checkpoint number: 56, Last checkpoint number: 66
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'65'}
+Training> Name=main_level/agent, Worker=0, Episode=69, Total reward=0, Steps=2794, Training iteration=2756
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/69_Step-2794.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 69
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_69.pb
+Best checkpoint number: 56, Last checkpoint number: 67
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'66'}
+Training> Name=main_level/agent, Worker=0, Episode=70, Total reward=0, Steps=2811, Training iteration=2794
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/70_Step-2811.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 70
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_70.pb
+Best checkpoint number: 56, Last checkpoint number: 68
+Copying the frozen checkpoint from ./frozen_models/agent/model_56.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'67'}
+Training> Name=main_level/agent, Worker=0, Episode=71, Total reward=0, Steps=2921, Training iteration=2811
+Checkpoint> Saving in path=['./checkpoint_sagemaker/agent/71_Step-2921.ckpt']
+[s3] Successfully uploaded .lock to                      s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.lock.
+Uploaded 3 files for checkpoint 71
+[s3] Successfully uploaded coach checkpoint to                   s3 bucket aws-deepracer-data-us-east-1-1 with s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/.coach_checkpoint.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+saved intermediate frozen graph: data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/model_71.pb
+Best checkpoint number: 69, Last checkpoint number: 69
+Copying the frozen checkpoint from ./frozen_models/agent/model_69.pb to /opt/ml/model/agent/model.pb.
+[s3] Successfully downloaded deepracer checkpoint json from                  s3 key data-a8068bea-bdd2-454f-809d-a6227efe2421/models/7108b00d-29c7-4351-8b73-def04be0944c/sagemaker-robomaker-artifacts/model/deepracer_checkpoints.json to local checkpoint_sagemaker/agent/deepracer_checkpoints.json.
+Deleting the frozen models in s3 for the iterations: {'68'}
