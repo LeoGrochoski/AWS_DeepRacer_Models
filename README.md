@@ -370,3 +370,5 @@ E por fim gostaria de informar que os testes foram realizados no free-tier da AW
 - Train your first AWS DeepRacer model, 2025. Disponivel em: https://docs.aws.amazon.com/deepracer/latest/developerguide/deepracer-how-it-works-reinforcement-learning-algorithm.html (29/08/2025).
 - AWS DeepRacer solution workflow, 2025. https://docs.aws.amazon.com/deepracer/latest/developerguide/deepracer-how-it-works-solution-workflow.html (29/08/2025).
 
+#   I n t r o d u c t i o n - t o - R e l a t i o n a l - D a t a b a s e s - R D B M S  
+ 
